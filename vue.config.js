@@ -1,5 +1,5 @@
 module.exports = {
-	baseUrl: '',
+	baseUrl: '/admin/',
   	devServer: {
   		host: 'qrcode.wearesqood.com',
 	},
