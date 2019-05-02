@@ -24,12 +24,15 @@
 import getSidebarItems from '@/data/sidebar-nav-items';
 
 // Main layout components
+import basicFunction from '@/basicFunction';
+import graphqlFunction from '@/graphqlFunction';
+import address from '@/address';
 import MainNavbar from '@/components/layout/MainNavbar/MainNavbar.vue';
 import MainSidebar from '@/components/layout/MainSidebar/MainSidebar.vue';
 import MainFooter from '@/components/layout/MainFooter/MainFooter.vue';
 
 export default {
-  name: 'analytics',
+  name: 'default',
   components: {
     MainNavbar,
     MainSidebar,
@@ -40,6 +43,40 @@ export default {
       sidebarItems: getSidebarItems(),
     };
   },
+
+  created: function()
+  {
+      this.fetchPlugin();
+  },
+
+  methods: {
+    fetchPlugin() {
+      this.axios.get(address + ":3000/get-plugin").then((response) => {
+        let query = `query getAllPlugin {
+          plugins {
+            name
+            status
+          }
+        }`;
+        graphqlFunction.graphqlFetchAll(query, (result) => {
+          var temp = {
+            title: 'Plugin',
+            items: [],
+          }
+          for(var i = 0; i < result.plugins.length; i++) {
+            temp.items.push({
+              title: basicFunction.capitalize(result.plugins[i].name),
+              htmlBefore: '<i class="material-icons">vertical_split</i>',
+              to: {
+                name: result.plugins[i].name,
+              },
+            });
+          }
+          this.sidebarItems.push(temp);
+        });
+      });
+    },
+  }
 };
 </script>
 

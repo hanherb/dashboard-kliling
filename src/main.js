@@ -43,8 +43,12 @@ Vue.use(VueAnalytics, {
 });
 
 router.beforeEach((to, from, next) => {
-    var user_role = localStorage.getItem('user_role');
-    var user_authority = localStorage.getItem('user_authority').split(',');
+    if(localStorage.getItem('user_role')) {
+        var user_role = localStorage.getItem('user_role');
+    }
+    if(localStorage.getItem('user_authority')) {
+        var user_authority = localStorage.getItem('user_authority').split(',');
+    }
     if(to.path == '/add-user') {
         for(var i = 0; i <= user_authority.length; i++) {
             if(i == user_authority.length) {

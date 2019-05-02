@@ -90,6 +90,8 @@ export default {
         to: null,
       },
       users: [],
+      consults: [],
+      commerces: [],
     };
   },
   computed: {
@@ -110,8 +112,8 @@ export default {
           data: [9, 3, 3, 9, 9],
         }],
       }, {
-        label: 'Sessions',
-        value: '8,391',
+        label: 'Consults',
+        value: this.consults.length,
         percentage: '7.21%',
         increase: false,
         decrease: true,
@@ -124,8 +126,8 @@ export default {
           data: [3.9, 4, 4, 9, 4],
         }],
       }, {
-        label: 'Pageviews',
-        value: '21,293',
+        label: 'Commerce',
+        value: this.commerces.length,
         percentage: '3.71%',
         increase: true,
         decrease: false,
@@ -158,6 +160,8 @@ export default {
   created: function()
   {
     this.fetchUsers();
+    this.fetchConsult();
+    this.fetchCommerce();
   },
 
   methods: {
@@ -176,7 +180,44 @@ export default {
           this.users = result.users;
         });
       })
-    }
+    },
+    fetchConsult() {
+      this.axios.get(address + ":3000/get-consult", headers).then((response) => {
+        let query = `query getAllConsult {
+          consults {
+            _id
+            doctor_name
+            patient_name
+            checkin_date
+            consult_date
+            diagnosis
+            medicine
+            status
+          }
+        }`;
+        graphqlFunction.graphqlFetchAll(query, (result) => {
+          this.consults = result.consults;
+        });
+      });
+    },
+    fetchCommerce() {
+      this.axios.get(address + ":3000/get-commerce", headers).then((response) => {
+        let query = `query getallCommerce {
+          commerces {
+            _id
+            name
+            price
+            qty
+            description
+            user
+            image
+          }
+        }`;
+        graphqlFunction.graphqlFetchAll(query, (result) => {
+          this.commerces = result.commerces;
+        });
+      });
+    },
   }
 };
 </script>

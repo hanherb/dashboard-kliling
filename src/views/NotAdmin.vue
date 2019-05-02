@@ -6,10 +6,29 @@
         <h2>403</h2>
         <h3>Forbidden!</h3>
         <p>You are just a mere user.</p>
-        <d-link to="/analytics">
-          <d-button pill>&larr; Go Back!</d-button>
+        <d-link :href="'' + user_page">
+          <d-button pill>&larr; Go to user page!</d-button>
         </d-link>
       </div>
     </div>
   </d-container>
 </template>
+<script>
+import basicFunction from '@/basicFunction';
+import graphqlFunction from '@/graphqlFunction';
+import address from '@/address';
+
+export default {
+  name: 'not-admin',
+  data() {
+    return {
+      user_page: ""
+    };
+  },
+
+  created: function()
+  {
+      this.user_page = address + ':8081';
+  },
+};
+</script>

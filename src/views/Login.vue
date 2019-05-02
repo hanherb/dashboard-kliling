@@ -67,18 +67,22 @@ export default {
           password: this.input.password
         })
         .then((response) => {
-          console.log(response.data);
+          console.log(response.data.response);
           if(response.data.token) {
-            alert("Login Success");
-            this.$router.push('/analytics');
-            location.reload();
-            this.$session.start();
-            this.$session.set('user', response.data.response);
-            document.cookie = "token=" + response.data.token;
-            document.cookie = "user_session=" + this.$session.get('user')._id;
-            document.cookie = "user_authority=" + this.$session.get('user').authority;
-            localStorage.setItem('user_role', this.$session.get('user').role);
-            localStorage.setItem('user_authority', this.$session.get('user').authority);
+            if(response.data.response.role == "admin") {
+              alert("Login Success");
+              this.$router.push('/analytics');
+              this.$session.start();
+              this.$session.set('user', response.data.response);
+              document.cookie = "token=" + response.data.token;
+              document.cookie = "user_session=" + this.$session.get('user')._id;
+              document.cookie = "user_authority=" + this.$session.get('user').authority;
+              localStorage.setItem('user_role', this.$session.get('user').role);
+              localStorage.setItem('user_authority', this.$session.get('user').authority);
+            }
+            else {
+              this.$router.push('/not-admin');
+            }
           }
           else {
             alert("Incorrect Credential");
